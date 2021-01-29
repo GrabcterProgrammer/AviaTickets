@@ -1,0 +1,42 @@
+import axios from "axios";
+import configAPI from "../config/ConfigAPI";
+
+class Api {
+
+    constructor(config) {
+        this.url = config.url;
+    }
+
+    async countries(){
+        try {
+            const response = await axios.get(`${this.url}/countries`);
+
+            return response.data
+        }
+        catch (err) {
+            console.error(err);
+            return Promise.reject(err)
+        }
+    }
+
+    async cities(){
+        try {
+            const response = await axios.get(`${this.url}/cities`);
+
+            return response.data
+        }
+        catch (err) {
+            console.error(err);
+            return Promise.reject(err)
+        }
+    }
+
+    prices(){
+
+    }
+
+}
+
+const api = new Api(configAPI)
+
+export default api
