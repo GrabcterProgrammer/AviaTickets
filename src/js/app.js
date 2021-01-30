@@ -1,4 +1,5 @@
-import api from "./services/servisAPI";
+import location from "./store/location";
 
-api.countries().then(data => console.log(data));
-api.cities().then(data => console.log(data));
+location.init().then(data => {
+    console.log(location.getCitiesOnPostCode("RU"))
+})
