@@ -2,6 +2,8 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const precss = require('precss');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   // Итак,  чтобы вебпак начал свою работу, нужно указать главный (основной) файл, который будет включать в себя все другие необходимые файлы (модули).
@@ -21,6 +23,11 @@ module.exports = {
     stats: 'minimal',
     hot: true,
   },
+  resolve: {
+    alias: {
+      images: path.resolve(__dirname, "src/img"),
+    },
+  },
   module: {
     // Для того, чтобы трансформировать файл, используются специальные утилиты - загрузчики (loaders).
     //Для любых настроек модуля вебпак используется поле module.
@@ -39,7 +46,7 @@ module.exports = {
         test: /\.css$/,
         use: [
           {
-            loader: 'style-loader',
+            loader: MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
@@ -58,7 +65,15 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpe?g|gif)$/,
+        test: /\.s[ac]ss$/i,
+        use: [
+          "style-loader",
+          "css-loader",
+          "sass-loader",
+        ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|ico|svg)$/,
         use: [
           {
             loader: 'file-loader',
@@ -74,6 +89,11 @@ module.exports = {
   //Например, плагин для минификации кода (во время сборки код подвергается очистке и минификации).
   //Или плагин для сборки html страницы и css кода (скрипты вставляются в html, куски css собираются в один файл).
   plugins: [
+    new CleanWebpackPlugin(),
+
+    new MiniCssExtractPlugin({
+      filename: "./style.css",
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
